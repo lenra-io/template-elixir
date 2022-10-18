@@ -14,6 +14,16 @@ defmodule TemplateElixir.Endpoint do
   plug(:dispatch)
 
   post "/" do
+    # Check conn.body_params to redirect to listeners/widget/manifest/resources
+    case conn.body_params do
+      %{"action" => _} ->
+        Listeners.run(conn, conn.body_params)
+
+      _ ->
+        raise "Invalid body params."
+    end
+
+    send_resp(conn, 200, "ok")
   end
 
   match _ do
