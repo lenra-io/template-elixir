@@ -9,6 +9,9 @@ defmodule TemplateElixir.Application do
   @port 3000
   @impl true
   def start(_type, _args) do
+    Listeners.init()
+    Widgets.init()
+
     children = [
       {Plug.Cowboy, scheme: :http, plug: TemplateElixir.Endpoint, port: @port}
     ]

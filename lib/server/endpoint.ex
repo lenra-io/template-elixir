@@ -3,6 +3,7 @@ defmodule TemplateElixir.Endpoint do
   A Plug responsible for logging request info, parsing request body's as JSON,
   matching routes, and dispatching responses.
   """
+  require Logger
 
   use Plug.Router
 
@@ -14,16 +15,23 @@ defmodule TemplateElixir.Endpoint do
   plug(:dispatch)
 
   post "/" do
-    # Check conn.body_params to redirect to listeners/widget/manifest/resources
     case conn.body_params do
-      %{"action" => _} ->
-        Listeners.run(conn, conn.body_params)
+      %{"action" => action, "props" => props, "event" => event, "api" => api} ->
+        Listeners.call_listener(action, props, event, api)
+
+      %{"name" => name, "props" => props, "data" => data} ->
+        Widgets.call_widget(name, data, props)
 
       _ ->
         raise "Invalid body params."
     end
+    |> case do
+      {:error, code, msg} ->
+        send_resp(conn, code, msg)
 
-    send_resp(conn, 200, "ok")
+      _res ->
+        send_resp(conn, 200, "ok")
+    end
   end
 
   match _ do
