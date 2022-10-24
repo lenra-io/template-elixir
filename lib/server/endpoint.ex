@@ -14,23 +14,26 @@ defmodule TemplateElixir.Endpoint do
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
-  post "/" do
+  post _ do
+    Logger.info(inspect(conn.body_params))
+
     case conn.body_params do
       %{"action" => action, "props" => props, "event" => event, "api" => api} ->
-        Listeners.call_listener(action, props, event, api)
+        Logger.info("Calling listener #{action}")
+        Listeners.call(conn, action, props, event, api)
 
-      %{"name" => name, "props" => props, "data" => data} ->
-        Widgets.call_widget(name, data, props)
+      %{"widget" => name, "props" => props, "data" => data} ->
+        Logger.info("Calling widget #{name}")
+        Widgets.call(conn, name, data, props, %{})
+
+      %{"resource" => resource} ->
+        Logger.info("Calling resource #{resource}")
+        Resources.call(conn, resource)
 
       _ ->
-        raise "Invalid body params."
-    end
-    |> case do
-      {:error, code, msg} ->
-        send_resp(conn, code, msg)
+        Logger.info("Calling manifest")
 
-      _res ->
-        send_resp(conn, 200, "ok")
+        Manifest.call(conn)
     end
   end
 

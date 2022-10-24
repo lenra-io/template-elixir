@@ -6,6 +6,8 @@ defmodule AnnotationModuleRegistry do
     quote do
       defmacro __using__(_opts) do
         quote do
+          # @behaviour unquote(__MODULE__)
+
           use UsesTracker, unquote(__MODULE__)
           @bindings %{}
           @on_definition {unquote(__MODULE__), :__on_definition__}
@@ -13,17 +15,29 @@ defmodule AnnotationModuleRegistry do
         end
       end
 
-      defmacro __before_compile__(_env) do
-        quote do
-          def bindings do
-            @bindings
+      defmacro __before_compile__(env) do
+        parent_module = __MODULE__
+
+        b1 =
+          quote do
+            def bindings do
+              @bindings
+            end
           end
 
-          def call(binding) do
-            {module, name} = Map.get(@bindings, binding)
-            apply(module, name, [])
-          end
-        end
+        rest =
+          Module.get_attribute(env.module, :bindings)
+          |> Enum.map(fn {k, v} ->
+            f_name = String.to_atom("new_" <> k)
+
+            quote do
+              def unquote(f_name)(opts \\ []) do
+                unquote(parent_module).new(unquote(k), opts)
+              end
+            end
+          end)
+
+        [b1 | rest]
       end
 
       def __on_definition__(env, _kind, name, args, _guards, _body) do
@@ -77,12 +91,12 @@ defmodule AnnotationModuleRegistry do
 
       defp load_bindings() do
         res =
-          :code.all_loaded()
-          |> Enum.filter(fn {module, _} ->
+          :application.get_key(:template_elixir, :modules)
+          |> elem(1)
+          |> Enum.filter(fn module ->
             not is_nil(module.module_info(:functions)[:__lenra_uses]) and
               __MODULE__ in module.__lenra_uses()
           end)
-          |> Enum.map(&elem(&1, 0))
           |> Enum.reduce(%{}, fn mod, merged_bindings ->
             module_bindings = apply(mod, :bindings, [])
 

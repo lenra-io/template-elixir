@@ -9,7 +9,9 @@ defmodule TemplateElixir.Application do
   @port 3000
   @impl true
   def start(_type, _args) do
+    Logger.info("Initializing Listeners...")
     Listeners.init()
+    Logger.info("Initializing Widgets...")
     Widgets.init()
 
     children = [

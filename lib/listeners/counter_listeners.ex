@@ -3,7 +3,13 @@ defmodule Listeners.CounterListeners do
 
   @action "increment"
   def increment(props, event, api) do
-    IO.inspect({props, event, api})
+    IO.inspect({@action, props, event, api})
+    :ok
+  end
+
+  @action "decrement"
+  def decrement(props, event, api) do
+    IO.inspect({@action, props, event, api})
     :ok
   end
 end
