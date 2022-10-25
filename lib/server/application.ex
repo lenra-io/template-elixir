@@ -1,4 +1,4 @@
-defmodule TemplateElixir.Application do
+defmodule Server.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -15,7 +15,12 @@ defmodule TemplateElixir.Application do
     Widgets.init()
 
     children = [
-      {Plug.Cowboy, scheme: :http, plug: TemplateElixir.Endpoint, port: @port}
+      {Plug.Cowboy, scheme: :http, plug: Server.Endpoint, port: @port},
+      {Finch,
+       name: HttpClient,
+       pools: %{
+         :default => [size: 10]
+       }}
     ]
 
     opts = [strategy: :one_for_one, name: TemplateElixir.Supervisor]

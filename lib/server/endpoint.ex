@@ -1,4 +1,4 @@
-defmodule TemplateElixir.Endpoint do
+defmodule Server.Endpoint do
   @moduledoc """
   A Plug responsible for logging request info, parsing request body's as JSON,
   matching routes, and dispatching responses.
@@ -15,10 +15,15 @@ defmodule TemplateElixir.Endpoint do
   plug(:dispatch)
 
   post _ do
-    Logger.info(inspect(conn.body_params))
+    Logger.warn(inspect(conn.body_params))
 
     case conn.body_params do
-      %{"action" => action, "props" => props, "event" => event, "api" => api} ->
+      %{
+        "action" => action,
+        "props" => props,
+        "event" => event,
+        "api" => api
+      } ->
         Logger.info("Calling listener #{action}")
         Listeners.call(conn, action, props, event, api)
 
@@ -28,12 +33,12 @@ defmodule TemplateElixir.Endpoint do
 
       %{"resource" => resource} ->
         Logger.info("Calling resource #{resource}")
-        Resources.call(conn, resource)
+        App.Resources.call(conn, resource)
 
       _ ->
         Logger.info("Calling manifest")
 
-        Manifest.call(conn)
+        App.Manifest.call(conn)
     end
   end
 

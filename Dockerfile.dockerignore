@@ -1,0 +1,5 @@
+**
+!/*.exs
+!/lib
+!/priv
+!/test

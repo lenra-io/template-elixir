@@ -3,6 +3,9 @@ defmodule Listeners do
     arity: 3,
     annotation: :action
 
+  alias Types.{Props, Event, Api}
+
+  @spec call(Plug.Conn.t(), String.t(), Props.t(), Event.t(), Api.t()) :: Plug.Conn.t()
   def call(conn, action, props, event, api) do
     Utils.call_or_error(
       get_bindings(),
@@ -20,7 +23,7 @@ defmodule Listeners do
   end
 
   def new(action, opts \\ []) do
-    %{type: "listener", action: action}
+    %{action: action}
     |> Utils.add_all(opts, [:props])
   end
 end

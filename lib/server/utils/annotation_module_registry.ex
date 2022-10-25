@@ -2,6 +2,7 @@ defmodule AnnotationModuleRegistry do
   defmacro __using__(opts) do
     annotation_name = Keyword.fetch!(opts, :annotation)
     needed_arity = Keyword.fetch!(opts, :arity)
+    data_struct? = Keyword.get(opts, :data_struct?, false)
 
     quote do
       defmacro __using__(_opts) do
@@ -43,14 +44,27 @@ defmodule AnnotationModuleRegistry do
       def __on_definition__(env, _kind, name, args, _guards, _body) do
         an = unquote(annotation_name)
         arity = unquote(needed_arity)
+        ds? = unquote(data_struct?)
         attr = Module.get_attribute(env.module, an)
         Module.delete_attribute(env.module, an)
         current_bindings = Module.get_attribute(env.module, :bindings)
 
+        ds =
+          if ds? do
+            t_ds = Module.get_attribute(env.module, :data_struct)
+            Module.delete_attribute(env.module, :data_struct)
+            t_ds
+          end
+
         with attr when not is_nil(attr) <- attr,
              :ok <- check_arity(args, arity, env.module, name),
              :ok <- check_exists(current_bindings, attr, an, arity) do
-          current_bindings = Map.put(current_bindings, attr, {env.module, name})
+          current_bindings =
+            if ds? do
+              Map.put(current_bindings, attr, {env.module, name, ds})
+            else
+              Map.put(current_bindings, attr, {env.module, name})
+            end
 
           Module.put_attribute(env.module, :bindings, current_bindings)
         else

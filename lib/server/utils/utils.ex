@@ -13,6 +13,14 @@ defmodule Utils do
     end
   end
 
+  def get_binding(bindings, key, error_404) do
+    if Map.has_key?(bindings, key) do
+      {:ok, Map.get(bindings, key)}
+    else
+      {:error, 404, error_404}
+    end
+  end
+
   def add_all(map, opts, keys) do
     keys
     |> Enum.reduce(%{}, fn k, new_map ->
