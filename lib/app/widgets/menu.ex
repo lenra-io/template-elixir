@@ -38,10 +38,10 @@ defmodule App.Widgets.Menu do
       "decoration" => %{
         "boxShadow" => %{
           "blurRadius" => 8,
-          "color" => 436_207_616,
+          "color" => 0x1A000000,
           "offset" => %{"dx" => 0, "dy" => 1}
         },
-        "color" => 4_294_967_295
+        "color" => 0xFFFFFFFF
       },
       "padding" => %{"bottom" => 2, "left" => 4, "right" => 4, "top" => 2},
       "type" => "container"

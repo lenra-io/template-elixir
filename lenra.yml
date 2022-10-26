@@ -1,36 +1,3 @@
 componentsApi: "1.0"
 generator:
   docker: ./Dockerfile
-  # dofigen:
-  #   from: "docker.io/elixir:1.14-alpine"
-  #   workdir: /app
-  #   root:
-  #     script:
-  #       - chown -R 1000 /app
-  #       - mkdir -p /.mix
-  #       - mkdir -p /.hex
-  #       - chown -R 1000 /.mix
-  #       - chown -R 1000 /.hex
-  #   adds:
-  #     - .
-  #   script:
-  #     - mix local.hex --force
-  #     - mix local.rebar --force
-  #     - mix deps.get
-  #     - mix compile
-  #   cmd:
-  #     - mix
-  #     - run
-  #     - --no-halt
-  #   ports:
-  #     - 3000
-  #   ignores:
-  #     - "**"
-  #     - "!/*.exs"
-  #     - "!/lib"
-  #     - "!/priv"
-  #     - "!/test"
-  #   caches:
-  #     - /.mix
-  #     - /.hex
-  #     - /app/_build
