@@ -33,6 +33,7 @@ defmodule AnnotationModuleRegistry do
             quote do
               def unquote(f_name)(opts \\ []) do
                 unquote(parent_module).new(unquote(k), opts)
+                |> Api.DataApi.to_map()
               end
             end
           end)

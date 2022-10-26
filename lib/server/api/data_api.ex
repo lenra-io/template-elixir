@@ -112,13 +112,20 @@ defmodule Api.DataApi do
     Enum.map(list, &to_struct(&1, struct))
   end
 
-  defp to_map(struct) when is_struct(struct) do
+  def to_map(struct) when is_struct(struct) do
     struct
     |> Map.from_struct()
-    |> Map.new(fn {k, v} -> {Atom.to_string(k), v} end)
+    |> to_map()
   end
 
-  defp to_map(map) when is_map(map), do: map
+  def to_map(map) when is_map(map) do
+    Map.new(map, fn {k, v} -> {key_to_str(k), to_map(v)} end)
+  end
+
+  def to_map(e), do: e
+
+  defp key_to_str(k) when is_atom(k), do: Atom.to_string(k)
+  defp key_to_str(k), do: k
 
   defp headers(api) do
     token = Map.get(api, "token")
