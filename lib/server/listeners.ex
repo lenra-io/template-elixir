@@ -7,19 +7,12 @@ defmodule Listeners do
 
   @spec call(Plug.Conn.t(), String.t(), Props.t(), Event.t(), Api.t()) :: Plug.Conn.t()
   def call(conn, action, props, event, api) do
-    Utils.call_or_error(
-      get_bindings(),
-      action,
-      [props, event, api],
-      "Listener #{action} not found."
-    )
-    |> case do
-      {:error, code, msg} ->
-        Plug.Conn.send_resp(conn, code, msg)
-
-      _res ->
-        Plug.Conn.send_resp(conn, 200, "ok")
+    with {:ok, {mod, fun, _data_struct, props_struct}} <-
+           Utils.get_binding(get_bindings(), action, "Listener #{action} not found."),
+         transformed_props <- Utils.to_struct(props, props_struct) do
+      apply(mod, fun, [transformed_props, event, api])
     end
+    |> Utils.send_resp_pipe(conn)
   end
 
   def new(action, opts \\ []) do
