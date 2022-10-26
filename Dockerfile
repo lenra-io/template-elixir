@@ -23,8 +23,10 @@ RUN \
 USER 1000
 RUN mix local.hex --force
 RUN mix local.rebar --force
+ADD --link mix.* ./
+RUN mix deps.get
 ADD --link . ./
-RUN mix deps.get && mix compile
+RUN mix compile
 
 EXPOSE 8080
 CMD ["/fwatchdog"]

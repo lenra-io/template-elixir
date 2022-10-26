@@ -30,3 +30,7 @@ generator:
   #     - "!/lib"
   #     - "!/priv"
   #     - "!/test"
+  #   caches:
+  #     - /.mix
+  #     - /.hex
+  #     - /app/_build
