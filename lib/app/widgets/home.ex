@@ -21,7 +21,7 @@ defmodule App.Widgets.Home do
       "crossAxisAlignment" => "center",
       "direction" => "vertical",
       "mainAxisAlignment" => "spaceEvenly",
-      "spacing" => 4,
+      "spacing" => 32,
       "type" => "flex"
     }
   end
