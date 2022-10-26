@@ -13,7 +13,7 @@ defmodule App.Widgets.Main do
       "crossAxisAlignment" => "center",
       "direction" => "vertical",
       "scroll" => true,
-      "spacing" => 4,
+      "spacing" => 32,
       "type" => "flex"
     }
   end
