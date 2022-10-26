@@ -44,12 +44,11 @@ defmodule AnnotationModuleRegistry do
         an = unquote(annotation_name)
         arity = unquote(needed_arity)
 
-        attr = Module.get_attribute(env.module, an)
-        Module.delete_attribute(env.module, an)
-        current_bindings = Module.get_attribute(env.module, :bindings)
-
+        attr = Module.delete_attribute(env.module, an)
         data_struct = Module.delete_attribute(env.module, :data_struct)
         props_struct = Module.delete_attribute(env.module, :props_struct)
+
+        current_bindings = Module.get_attribute(env.module, :bindings)
 
         with attr when not is_nil(attr) <- attr,
              :ok <- check_arity(args, arity, env.module, name),
