@@ -32,6 +32,8 @@ ENV \
 WORKDIR /app
 COPY --link --chown=1000:1000 --from=of-watchdog "/fwatchdog" "/fwatchdog"
 COPY --link --chown=1000:1000 --from=build "/app/_build/prod" "/app/_build/prod"
+COPY --link --chown=1000:1000 --from=build "/app/_build/prod" "/app/_build/prod"
+COPY --link --chown=1000:1000 --from=build "/app/priv" "/app/priv"
 USER 1000
 
 EXPOSE 8080

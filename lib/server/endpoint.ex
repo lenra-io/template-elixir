@@ -15,8 +15,6 @@ defmodule Server.Endpoint do
   plug(:dispatch)
 
   post _ do
-    Logger.warn(inspect(conn.body_params))
-
     case conn.body_params do
       %{
         "action" => action,
