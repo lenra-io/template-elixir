@@ -20,7 +20,7 @@ defmodule App.Widgets.Counter do
       ],
       "crossAxisAlignment" => "center",
       "mainAxisAlignment" => "spaceEvenly",
-      "spacing" => 2,
+      "spacing" => 16,
       "type" => "flex"
     }
   end
