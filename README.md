@@ -60,7 +60,7 @@ The `lib/app` directory is where your app lives.
 - 
 
 ### Create your views
-Run `mix lenra.gen.view <ViewName>` to create a new view, this will generate a the view `lib/app/views/view_name.ex`.
+Run `mix lenra.gen.view <ViewName>` to create a new view, this will generate the view `lib/app/views/view_name.ex`.
 Each View Module define only one view : You can only call the `defview` macro once per module.
 
 You can then eather call your view directly using `App.Views.MyView.c/1` or create a ref to it using `App.Views.MyView.r/0`
@@ -84,19 +84,18 @@ end
 ```
 
 ### Create your Listeners
-Same principle with the listeners. Simply create your module under the `lib/app/listeners` directory.
-Then create a new function with the `@action` annotation to register and name your listener.
-Same thing with the listeners, you can bind the props argument using the `@props_struc` annotation.
+Run `mix lenra.gen.listener <Module> [<listener_name>...]` to create a new listener(s), this will generate the module `lib/app/views/module_name.ex` with the listed listeners.
+
+
+You can then ref to it using `App.Listeners.MyModule.<listener_name>_r/0`.
+Remember, except for testing purpose, you should probably never call directly `App.Listeners.MyModule.<listener_name>/1` but only create a ref to it using the `_r` version of the function.
 
 Example :
 ```elixir
 defmodule App.Listeners.CounterListeners do
   use Listeners
-  alias App.Props.Id
 
-  @action "increment"
-  @props_struct Id
-  def increment(%Id{} = props, _event, api) do
+ deflistener :increment, %{props: props}) do
     App.Counters.increment(api, props._id)
   end
 end
@@ -104,11 +103,11 @@ end
 
 ### The data API 
 In your listener, you will want to call the Data API to change your model.
-To do this, use the `Api.DataApi` module.
+To do this, use the `Api.Data` module.
 
 You can bind the return value of the data API into a struct to have typed value. To do this, simply add the `as: MyStruct` option.
 
 Example : 
 ```elixir
-Api.DataApi.get_doc(api, "counters", id, as: App.Counters.Counter)
+Api.Data.get_doc(api, "counters", id, as: App.Counters.Counter)
 ```

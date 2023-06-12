@@ -9,7 +9,7 @@ defmodule App.Views.Counter do
       "children" => [
         %{"type" => "text", "value" => "#{props["text"]} : #{counter["value"]}"},
         %{
-          "onPressed" => Listeners.Counter.increment_r(props: %Id{_id: counter["_id"]}),
+          "onPressed" => Listeners.Counter.increment_r(props: %{_id: counter["_id"]}),
           "text" => "+",
           "type" => "button"
         }
