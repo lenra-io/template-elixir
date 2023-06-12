@@ -68,17 +68,35 @@ You can then eather call your view directly using `App.Views.MyView.c/1` or crea
 Example : 
 ```elixir
 defmodule App.Views.Counter do
-  use Lenra.Views
-
-  alias App.Listeners.CounterListeners
-  alias App.Counters.Counter
-  alias App.Props.{Text, Id}
-
+  use Lenra.View
+  
   defview %{data: _data_, props: _props} do
     %{
       "type" => "text",
       "value" => "Hello World"
     }
+  end
+end
+```
+
+You can add a custom behavior before every call of your view by overriding the call/2 function : 
+
+```elixir
+defmodule App.Views.Counter do
+  use Lenra.View
+
+  def call(fun, args) do
+    # Do whatever you need to do
+    # You can parse the params to struct for example
+    # then call your view or return another view, for example an error.
+    apply(__MODULE__, fun, [args])
+
+    # error : 
+    # App.Views.Error404.c()
+  end
+
+  defview %{data: _data_, props: _props} do
+    # [...]
   end
 end
 ```
@@ -92,14 +110,37 @@ Remember, except for testing purpose, you should probably never call directly `A
 
 Example :
 ```elixir
-defmodule App.Listeners.CounterListeners do
-  use Listeners
+defmodule App.Listeners.Counter do
+  use Lenra.Listener
 
  deflistener :increment, %{props: props}) do
     App.Counters.increment(api, props._id)
   end
 end
 ```
+
+Same with the listeners, you can add a custom behavior before every call of your view by overriding the call/2 function : 
+
+```elixir
+defmodule App.Listeners.Counter do
+  use Lenra.Listener
+
+  def call(fun, args) do
+    # Do whatever you need to do
+    # You can parse the params to struct for example.
+    # then call your listener (or any listener really)
+    apply(__MODULE__, fun, [args])
+  end
+
+  deflistener :increment, %{props: props}) do
+    App.Counters.increment(api, props._id)
+  end
+
+  deflistener :decrement, %{props: props}) do
+    App.Counters.decrement(api, props._id)
+  end
+end
+``` 
 
 ### The data API 
 In your listener, you will want to call the Data API to change your model.
