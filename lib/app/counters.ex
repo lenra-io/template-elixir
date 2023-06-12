@@ -2,6 +2,10 @@ defmodule App.Counters do
   alias App.Counters.Counter
   alias Lenra.Api
 
+  @moduledoc """
+    The Counter API
+  """
+
   @coll "counters"
 
   def coll do
@@ -28,13 +32,13 @@ defmodule App.Counters do
     create(api, "global")
   end
 
-  def get_mine_query() do
+  def get_mine_query do
     %{
       user: "@me"
     }
   end
 
-  def get_global_query() do
+  def get_global_query do
     %{
       user: "global"
     }

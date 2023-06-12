@@ -1,10 +1,16 @@
 defmodule App.Manifest do
   use Lenra.Manifest
 
-  def lenra_routes() do
+  @moduledoc """
+    The Manifest, where all the views are defined
+  """
+
+  alias App.Views.{Bar, Main}
+
+  def lenra_routes do
     [
-      %{"path" => "/", "view" => App.Views.Main.r()},
-      %{"path" => "/bar", "view" => App.Views.Bar.r()}
+      %{"path" => "/", "view" => Main.r()},
+      %{"path" => "/bar", "view" => Bar.r()}
     ]
   end
 end

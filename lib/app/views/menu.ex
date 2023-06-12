@@ -1,6 +1,10 @@
 defmodule App.Views.Menu do
   use Lenra.View
 
+  @moduledoc """
+    The Menu View
+  """
+
   defview _ do
     %{
       "child" => %{

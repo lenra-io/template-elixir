@@ -1,6 +1,10 @@
 defmodule App.Views.Main do
   use Lenra.View
 
+  @moduledoc """
+    The Main View
+  """
+
   alias App.Views.{Home, Menu}
 
   defview _ do

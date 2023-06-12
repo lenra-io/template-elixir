@@ -1,6 +1,10 @@
 defmodule App.Listeners.Lifecycle do
   use Lenra.Listener
 
+  @moduledoc """
+    The Lifecycle listeners where all the listeners that happen in the app lifcycle are defined.
+  """
+
   alias App.Counters
 
   def_on_env_start %{api: api} do

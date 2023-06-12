@@ -1,8 +1,12 @@
 defmodule App.Views.Home do
   use Lenra.View
 
-  alias App.Views
+  @moduledoc """
+    The Home View
+  """
+
   alias App.Counters
+  alias App.Views
 
   defview _ do
     %{

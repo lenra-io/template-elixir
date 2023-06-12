@@ -1,6 +1,10 @@
 defmodule App.Application do
   use Application
 
+  @moduledoc """
+    The Base application containing the app entrypoint.
+  """
+
   def start(_type, _args) do
     children = [
       App
