@@ -1,14 +1,13 @@
-defmodule App.Widgets.Main do
-  use Widgets
+defmodule App.Views.Main do
+  use Lenra.View
 
-  alias App.Widgets
+  alias App.Views.{Home, Menu}
 
-  @name "main"
-  def main(_data, _props, _context) do
+  defview _ do
     %{
       "children" => [
-        Widgets.Menu.new_menu(),
-        Widgets.Home.new_home()
+        Menu.r(),
+        Home.r()
       ],
       "crossAxisAlignment" => "center",
       "direction" => "vertical",

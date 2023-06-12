@@ -1,5 +1,6 @@
 defmodule App.Counters do
   alias App.Counters.Counter
+  alias Lenra.Api
 
   @coll "counters"
 
@@ -8,7 +9,7 @@ defmodule App.Counters do
   end
 
   def get_global(api) do
-    case Api.DataApi.execute_query(api, @coll, get_global_query(), as: Counter) do
+    case Api.Data.execute_query(api, @coll, get_global_query(), as: Counter) do
       {:ok, [res]} -> {:ok, res}
       {:ok, []} -> {:ok, nil}
       err -> err
@@ -16,7 +17,7 @@ defmodule App.Counters do
   end
 
   defp create(api, who) do
-    Api.DataApi.create_doc(api, @coll, %Counter{value: 0, user: who})
+    Api.Data.create_doc(api, @coll, %Counter{value: 0, user: who})
   end
 
   def create_mine(api) do
@@ -40,9 +41,9 @@ defmodule App.Counters do
   end
 
   def increment(api, id) do
-    with {:ok, counter} <- Api.DataApi.get_doc(api, @coll, id, as: App.Counters.Counter) do
+    with {:ok, counter} <- Api.Data.get_doc(api, @coll, id, as: App.Counters.Counter) do
       new_ct = Map.put(counter, :value, counter.value + 1)
-      Api.DataApi.update_doc(api, @coll, new_ct)
+      Api.Data.update_doc(api, @coll, new_ct)
     end
   end
 end

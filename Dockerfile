@@ -17,9 +17,9 @@ RUN \
 USER 1000
 RUN mix local.hex --force
 RUN mix local.rebar --force
-ADD --link mix.* ./
+ADD --link --chown=1000:1000 mix.* ./
 RUN mix deps.get
-ADD --link . ./
+ADD --link --chown=1000:1000 . ./
 RUN MIX_ENV=prod mix release
 
 FROM docker.io/elixir:1.14-alpine as runtime

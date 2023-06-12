@@ -1,8 +1,7 @@
-defmodule App.Widgets.Menu do
-  use Widgets
+defmodule App.Views.Menu do
+  use Lenra.View
 
-  @name "menu"
-  def menu_w(_data, _props, _context) do
+  defview _ do
     %{
       "child" => %{
         "children" => [
