@@ -7,10 +7,14 @@ defmodule App.Manifest do
 
   alias App.Views.{Bar, Main}
 
-  def lenra_routes do
-    [
-      %{"path" => "/", "view" => Main.r()},
-      %{"path" => "/bar", "view" => Bar.r()}
-    ]
+  # def lenra_routes do
+  #   [
+  #     %{"path" => "/", "view" => Main.r()},
+  #     %{"path" => "/bar", "view" => Bar.r()}
+  #   ]
+  # end
+
+  def root_view do
+    Main.name()
   end
 end

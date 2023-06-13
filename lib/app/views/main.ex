@@ -16,7 +16,7 @@ defmodule App.Views.Main do
       "crossAxisAlignment" => "center",
       "direction" => "vertical",
       "scroll" => true,
-      "spacing" => 32,
+      "spacing" => 4,
       "type" => "flex"
     }
   end
