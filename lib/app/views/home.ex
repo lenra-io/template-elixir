@@ -33,7 +33,7 @@ defmodule App.Views.Home do
       "crossAxisAlignment" => "center",
       "direction" => "vertical",
       "mainAxisAlignment" => "spaceEvenly",
-      "spacing" => 32,
+      "spacing" => 16,
       "type" => "flex"
     }
   end

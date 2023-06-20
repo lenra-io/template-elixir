@@ -35,7 +35,7 @@ defmodule App.Views.Menu do
         "crossAxisAlignment" => "center",
         "fillParent" => true,
         "mainAxisAlignment" => "spaceBetween",
-        "padding" => %{"right" => 4},
+        "padding" => %{"right" => 32},
         "type" => "flex"
       },
       "decoration" => %{
@@ -46,7 +46,7 @@ defmodule App.Views.Menu do
         },
         "color" => 0xFFFFFFFF
       },
-      "padding" => %{"bottom" => 2, "left" => 4, "right" => 4, "top" => 2},
+      "padding" => %{"bottom" => 16, "left" => 32, "right" => 32, "top" => 16},
       "type" => "container"
     }
   end
