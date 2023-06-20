@@ -5,16 +5,11 @@ defmodule App.Manifest do
     The Manifest, where all the views are defined
   """
 
-  alias App.Views.{Bar, Main}
+  alias App.Views.{Main}
 
-  # def lenra_routes do
-  #   [
-  #     %{"path" => "/", "view" => Main.r()},
-  #     %{"path" => "/bar", "view" => Bar.r()}
-  #   ]
-  # end
-
-  def root_view do
-    Main.name()
+  def lenra_routes do
+    [
+      %{"path" => "/", "view" => Main.r()}
+    ]
   end
 end
