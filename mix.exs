@@ -22,7 +22,9 @@ defmodule App.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:lenra_api, "~> 0.2.1"},
+      {:lenra_api, "~> 0.2.2"},
+      # {:lenra_api, path: "../app-lib-elixir"},
+      {:lenra_components, "~> 0.1.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end

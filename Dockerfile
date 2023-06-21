@@ -18,7 +18,6 @@ USER 1000
 RUN mix local.hex --force
 RUN mix local.rebar --force
 ADD --link --chown=1000:1000 mix.* ./
-RUN echo "t"
 RUN mix deps.get
 ADD --link --chown=1000:1000 . ./
 RUN MIX_ENV=prod mix release

@@ -12,4 +12,8 @@ defmodule App.Manifest do
       %{"path" => "/", "view" => Main.r()}
     ]
   end
+
+  def root_view do
+    Main.name()
+  end
 end

@@ -1,5 +1,6 @@
 defmodule App.Views.Main do
   use Lenra.View
+  # use Lenra.Components
 
   @moduledoc """
     The Main View
@@ -8,16 +9,15 @@ defmodule App.Views.Main do
   alias App.Views.{Home, Menu}
 
   defview _ do
-    %{
-      "children" => [
+    Flex.n(
+      [
         Menu.r(),
         Home.r()
       ],
-      "crossAxisAlignment" => "center",
-      "direction" => "vertical",
-      "scroll" => true,
-      "spacing" => 4,
-      "type" => "flex"
-    }
+      crossAxisAlignment: Alignment.center(),
+      direction: Direction.vertical(),
+      scroll: true,
+      spacing: 4
+    )
   end
 end

@@ -9,32 +9,23 @@ defmodule App.Views.Home do
   alias App.Views
 
   defview _ do
-    %{
-      "children" => [
+    Flex.n(
+      [
         Views.Counter.r(
           coll: Counters.coll(),
           query: Counters.get_mine_query(),
-          props: %{"text" => "My personnal counter"}
+          props: %{text: "My personnal counter"}
         ),
         Views.Counter.r(
           coll: Counters.coll(),
           query: Counters.get_global_query(),
-          props: %{"text" => "The common counter"}
-        ),
-        %{
-          "type" => "button",
-          "text" => "Go to bar",
-          "onPressed" => %{
-            "action" => "@lenra:navTo",
-            "props" => %{"path" => "/bar"}
-          }
-        }
+          props: %{text: "The common counter"}
+        )
       ],
-      "crossAxisAlignment" => "center",
-      "direction" => "vertical",
-      "mainAxisAlignment" => "spaceEvenly",
-      "spacing" => 16,
-      "type" => "flex"
-    }
+      spacing: 16,
+      crossAxisAlignment: "center",
+      mainAxisAlignment: "spaceEvenly",
+      direction: Direction.vertical()
+    )
   end
 end

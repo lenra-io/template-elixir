@@ -7,20 +7,15 @@ defmodule App.Views.Counter do
 
   alias App.Listeners.Counter
 
-  defview %{data: [counter], props: props} do
-    %{
-      "children" => [
-        %{"type" => "text", "value" => "#{props["text"]} : #{counter["value"]}"},
-        %{
-          "onPressed" => Counter.increment_r(props: %{_id: counter["_id"]}),
-          "text" => "+",
-          "type" => "button"
-        }
+  defview %{data: [%{"value" => value, "_id" => id}], props: %{"text" => text}} do
+    Flex.n(
+      [
+        Text.n("#{text} : #{value}"),
+        Button.n("+", onPressed: Counter.increment_r(props: %{_id: id}))
       ],
-      "crossAxisAlignment" => "center",
-      "mainAxisAlignment" => "spaceEvenly",
-      "spacing" => 16,
-      "type" => "flex"
-    }
+      spacing: 16,
+      mainAxisAlignment: "spaceEvenly",
+      crossAxisAlignment: "center"
+    )
   end
 end
