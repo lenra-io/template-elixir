@@ -11,3 +11,4 @@ erl_crash.dump
 template_elixir-*.tar
 /tmp/
 .lenra
+.DS_Store

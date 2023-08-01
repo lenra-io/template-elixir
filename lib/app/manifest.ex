@@ -1,23 +1,19 @@
 defmodule App.Manifest do
-  @spec call(Plug.Conn.t()) :: Plug.Conn.t()
-  def call(conn) do
-    res = %{"manifest" => manifest()}
-    Plug.Conn.send_resp(conn, 200, Jason.encode!(res))
+  use Lenra.Manifest
+
+  @moduledoc """
+    The Manifest, where all the views are defined
+  """
+
+  alias App.Views.{Main}
+
+  def lenra_routes do
+    [
+      %{"path" => "/", "view" => Main.r()}
+    ]
   end
 
-  defp manifest() do
-    %{
-      "rootWidget" => "main",
-      "lenraRoutes" => lenra(),
-      "jsonRoutes" => json()
-    }
-  end
-
-  defp lenra() do
-    %{}
-  end
-
-  defp json() do
-    %{}
+  def root_view do
+    Main.name()
   end
 end

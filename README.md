@@ -22,7 +22,7 @@ To download it, you can use cargo or download the binary via the [latest github 
 From cargo you need to run the following command :
 
 ```bash
-cargo install lenra_cli --version=1.0.0-beta.5
+cargo install lenra_cli
 # or `cargo install lenra_cli@1.0.0-beta.5`
 ```
 
@@ -54,76 +54,101 @@ lenra stop
 
 ## Using the Elixir template
 
-The `server` directory is where all the boilerplate is stored. It creates and start the server that will serve your widget and listeners. You don't need to understand/change the code in this directory.
-The `app` directory is where your app lives. You can add/remove/update files the way you want in this directory with some exceptions : 
-- The `Manifest` module should only be updated to add/remove routes.
-- The `Resources` module serve your static files (image mainly). Don't change this unless you want to serve files dynamically (generate images on the fly, get images from an outside server, etc.)
+The `lib/app` directory is where your app lives.
+- `lib/app/views` contains your views. Run `mix lenra.gen.view <ViewName>` to create a new view
+- `lib/app/listeners` contains your listeners. Run `mix lenra.gen.listener <ListenerModule> [<listener>...]` to create a new listener module.
+- 
 
-### Create your widgets
+### Create your views
+Run `mix lenra.gen.view <ViewName>` to create a new view, this will generate the view `lib/app/views/view_name.ex`.
+Each View Module define only one view : You can only call the `defview` macro once per module.
 
-To create your widget, simply create a new module under lib/app/widgets (or anywher else, but stay organized !).
-Then create a new function in this module and add the `@name` annotation to register and name your widget.
-You also can bind the data and props arguments to struct using the `@data_struct` and `@props_struct` annotations respectively. Otherwise, they will be simple map.
-
-You can then call your widget using the generated function in others widgets `MyWidget.new_<widget_name>()`.
+You can then eather call your view directly using `App.Views.MyView.c/1` or create a ref to it using `App.Views.MyView.r/0`
 
 Example : 
 ```elixir
-defmodule App.Widgets.Counter do
-  use Widgets
-
-  alias App.Listeners.CounterListeners
-  alias App.Counters.Counter
-  alias App.Props.{Text, Id}
-
-  @name "counter"
-  @data_struct Counter
-  @props_struct Text
-  def counter_w([%Counter{} = counter], %Text{} = props, _context) do
+defmodule App.Views.Counter do
+  use Lenra.View
+  
+  defview %{data: _data_, props: _props} do
     %{
-      "children" => [
-        %{"type" => "text", "value" => "#{props.text} : #{counter.value}"},
-        %{
-          "onPressed" => CounterListeners.new_increment(props: %Id{_id: counter._id}),
-          "text" => "+",
-          "type" => "button"
-        }
-      ],
-      "crossAxisAlignment" => "center",
-      "mainAxisAlignment" => "spaceEvenly",
-      "spacing" => 2,
-      "type" => "flex"
+      "type" => "text",
+      "value" => "Hello World"
     }
   end
 end
 ```
 
+You can add a custom behavior before every call of your view by overriding the call/2 function : 
+
+```elixir
+defmodule App.Views.Counter do
+  use Lenra.View
+
+  def call(fun, args) do
+    # Do whatever you need to do
+    # You can parse the params to struct for example
+    # then call your view or return another view, for example an error.
+    apply(__MODULE__, fun, [args])
+
+    # error : 
+    # App.Views.Error404.c()
+  end
+
+  defview %{data: _data_, props: _props} do
+    # [...]
+  end
+end
+```
+
 ### Create your Listeners
-Same principle with the listeners. Simply create your module under the `lib/app/listeners` directory.
-Then create a new function with the `@action` annotation to register and name your listener.
-Same thing with the listeners, you can bind the props argument using the `@props_struc` annotation.
+Run `mix lenra.gen.listener <Module> [<listener_name>...]` to create a new listener(s), this will generate the module `lib/app/views/module_name.ex` with the listed listeners.
+
+
+You can then ref to it using `App.Listeners.MyModule.<listener_name>_r/0`.
+Remember, except for testing purpose, you should probably never call directly `App.Listeners.MyModule.<listener_name>/1` but only create a ref to it using the `_r` version of the function.
 
 Example :
 ```elixir
-defmodule App.Listeners.CounterListeners do
-  use Listeners
-  alias App.Props.Id
+defmodule App.Listeners.Counter do
+  use Lenra.Listener
 
-  @action "increment"
-  @props_struct Id
-  def increment(%Id{} = props, _event, api) do
+ deflistener :increment, %{props: props}) do
     App.Counters.increment(api, props._id)
   end
 end
 ```
 
+Same with the listeners, you can add a custom behavior before every call of your view by overriding the call/2 function : 
+
+```elixir
+defmodule App.Listeners.Counter do
+  use Lenra.Listener
+
+  def call(fun, args) do
+    # Do whatever you need to do
+    # You can parse the params to struct for example.
+    # then call your listener (or any listener really)
+    apply(__MODULE__, fun, [args])
+  end
+
+  deflistener :increment, %{props: props}) do
+    App.Counters.increment(api, props._id)
+  end
+
+  deflistener :decrement, %{props: props}) do
+    App.Counters.decrement(api, props._id)
+  end
+end
+``` 
+
 ### The data API 
 In your listener, you will want to call the Data API to change your model.
-To do this, use the `Api.DataApi` module.
+To do this, use the `Api.Data` module.
 
 You can bind the return value of the data API into a struct to have typed value. To do this, simply add the `as: MyStruct` option.
 
 Example : 
 ```elixir
-Api.DataApi.get_doc(api, "counters", id, as: App.Counters.Counter)
+Api.Data.get_doc(api, "counters", id, as: App.Counters.Counter)
 ```

@@ -17,9 +17,9 @@ RUN \
 USER 1000
 RUN mix local.hex --force
 RUN mix local.rebar --force
-ADD --link mix.* ./
+ADD --link --chown=1000:1000 mix.* ./
 RUN mix deps.get
-ADD --link . ./
+ADD --link --chown=1000:1000 . ./
 RUN MIX_ENV=prod mix release
 
 FROM docker.io/elixir:1.14-alpine as runtime
@@ -27,7 +27,7 @@ FROM docker.io/elixir:1.14-alpine as runtime
 ENV \
     mode="http"\
     upstream_url="http://127.0.0.1:3000"\
-    fprocess="/app/_build/prod/rel/template_elixir/bin/template_elixir start"\
+    fprocess="/app/_build/prod/rel/app/bin/app start"\
     exec_timeout="0"
 WORKDIR /app
 COPY --link --chown=1000:1000 --from=of-watchdog "/fwatchdog" "/fwatchdog"

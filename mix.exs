@@ -1,9 +1,9 @@
-defmodule TemplateElixir.MixProject do
+defmodule App.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :template_elixir,
+      app: :app,
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
@@ -15,16 +15,16 @@ defmodule TemplateElixir.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Server.Application, []}
+      mod: {App.Application, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:plug_cowboy, "~> 2.0"},
-      {:jason, "~> 1.4"},
-      {:finch, "~> 0.13.0"}
+      {:lenra_api, "~> 0.2.2"},
+      {:lenra_components, "~> 0.1.0"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 end

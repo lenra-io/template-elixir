@@ -1,4 +1,8 @@
 defmodule App.Counters.Counter do
+  @moduledoc """
+    The Counter struct
+  """
+
   @derive Jason.Encoder
   @enforce_keys [:value, :user]
   defstruct value: 0,
